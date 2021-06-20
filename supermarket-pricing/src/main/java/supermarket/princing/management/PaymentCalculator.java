@@ -8,9 +8,12 @@ import supermarket.princing.model.IShoppingCart;
 import supermarket.princing.model.ISupermarketCatalog;
 import supermarket.princing.model.Product;
 import supermarket.princing.model.Receipt;
+import supermarket.princing.model.enums.ProductUnit;
 import supermarket.princing.model.offers.type.Offer;
 
 public class PaymentCalculator implements IPaymentCalculator {
+
+	private static final int OUNCES_PER_POUND = 16;
 
 	private ISupermarketCatalog catalog ;
 
@@ -32,10 +35,14 @@ public class PaymentCalculator implements IPaymentCalculator {
 	 */
 	private void addToReceiptItems(Receipt receipt, Entry<Product, BigDecimal> entry) {
 		Product product = entry.getKey();
-		BigDecimal price ;
+		BigDecimal price;
 		BigDecimal quantity = entry.getValue();
 		BigDecimal unitPrice = this.catalog.getUnitPrice(product);
-		price = quantity.multiply(unitPrice);
+		if (ProductUnit.EACH.equals(product.getUnit()))
+			price = quantity.multiply(unitPrice);
+		else {
+			price = quantity.divide(new BigDecimal(OUNCES_PER_POUND)).multiply(unitPrice);
+		}
 		receipt.addToScannedItemList(product, quantity, unitPrice, price);
 	}
 
