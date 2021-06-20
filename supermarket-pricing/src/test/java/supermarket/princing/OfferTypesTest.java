@@ -46,6 +46,18 @@ class OfferTypesTest{
 		Assertions.assertEquals(expectedResult, Receipt.getPaymentAmount());
 	}
 
+	@ParameterizedTest
+	@CsvSource({
+		"3, 500.0, 500.0",   // test three for amount offer
+		"1, 500.0, 200.0",  // test three for amount offer if quantity less than three
+		"4, 500.0, 700.0"  // test three for amount offer if quantity more than three
+	})
+	void testThreeForAmount(String a, String b, String c){
+		Receipt Receipt = setContextInformation(new BigDecimal(a), OfferType.THREE_FOR_AMOUNT, new BigDecimal(b), catalog);
+		BigDecimal expectedResult = new BigDecimal(c).setScale(2, RoundingMode.CEILING);
+		Assertions.assertEquals(expectedResult, Receipt.getPaymentAmount());
+	}
+
 	@Test
 	void testWithoutDiscount() {
 		shoppingCart.addToCart(canOfBeans, new BigDecimal(5));        

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import supermarket.princing.model.enums.OfferType;
 import supermarket.princing.model.offers.type.Offer;
+import supermarket.princing.model.offers.type.ThreeForAmountOffer;
 import supermarket.princing.model.offers.type.ThreeForTwoOffer;
 
 //The Supermarket catalog is represented by HashMap, the key represents the product, and the value represents the unit price
@@ -34,7 +35,9 @@ public class SupermarketCatalog  implements ISupermarketCatalog{
 
 	@Override
 	public void addOffer(OfferType offerType, Product product, BigDecimal discountPrice) {
-		if (offerType == OfferType.THREE_FOR_TWO)  {
+		if (offerType == OfferType.THREE_FOR_AMOUNT) {
+			this.offers.put(product, new ThreeForAmountOffer(product, discountPrice));
+		}else if (offerType == OfferType.THREE_FOR_TWO)  {
 			this.offers.put(product, new ThreeForTwoOffer(product, discountPrice));
 		}
 	}
