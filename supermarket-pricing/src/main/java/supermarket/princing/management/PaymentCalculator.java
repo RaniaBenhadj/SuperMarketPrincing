@@ -21,6 +21,10 @@ public class PaymentCalculator implements IPaymentCalculator {
 		this.catalog = catalog;
 	}
 
+	/** generate the receipt 
+	 * @param cart
+	 * return receipt
+	 */
 	@Override
 	public Receipt generateReceipt(IShoppingCart cart) {
 		Receipt receipt = new Receipt();
@@ -29,7 +33,7 @@ public class PaymentCalculator implements IPaymentCalculator {
 		return receipt;
 	}
 
-	/**
+	/** add scanned item to receipt scanned item list
 	 * @param receipt
 	 * @param entry
 	 */
@@ -46,13 +50,17 @@ public class PaymentCalculator implements IPaymentCalculator {
 		receipt.addToScannedItemList(product, quantity, unitPrice, price);
 	}
 
-	// applying discount to client Receipt consist in adding the discount to receipt discount list
+	/** apply discount to client Receipt consist in adding the discount to receipt discount list
+	 * @param cart
+	 * @param receipt
+	 * @param catalog
+	 */ 
 	private void applyDiscountToReceipt(IShoppingCart cart, Receipt receipt, ISupermarketCatalog catalog ) {
 		cart.getShoppingCartMap().keySet().stream().filter(x -> catalog.getOffers().containsKey(x)).forEach(product ->
 		addToReceiptDiscounts(cart, receipt, catalog, product));
 	}
 
-	/**
+	/** add discount to receipt discount list
 	 * @param cart
 	 * @param receipt
 	 * @param catalog
